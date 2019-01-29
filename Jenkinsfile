@@ -13,6 +13,14 @@ pipeline {
     //PR_BRANCH = "${env.APP_NAME}-${env.BRANCH_NAME}".toLowerCase()
   }
   stages {
+    stage('Node build') {
+      steps {
+        checkout scm
+        container('nodejs') {
+          sh 'npm install'
+        }
+      }
+    }
     stage('Docker build') {
       steps {
         container('docker') {
