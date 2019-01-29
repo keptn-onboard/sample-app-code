@@ -16,6 +16,7 @@ pipeline {
     stage('Docker build') {
       steps {
         container('docker') {
+          sh "docker -v"
           sh "docker build -t ${env.IMAGE_TAG} ."
         }
       }
