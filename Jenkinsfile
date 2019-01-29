@@ -13,14 +13,6 @@ pipeline {
     //PR_BRANCH = "${env.APP_NAME}-${env.BRANCH_NAME}".toLowerCase()
   }
   stages {
-    stage('Maven build') {
-      steps {
-        checkout scm
-        container('maven') {
-          sh 'mvn -B clean package'
-        }
-      }
-    }
     stage('Docker build') {
       steps {
         container('docker') {
