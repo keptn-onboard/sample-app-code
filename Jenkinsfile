@@ -2,12 +2,12 @@
 
 pipeline {
   agent {
-    label 'maven'
+    label 'nodejs'
   }
   environment {
-    APP_NAME = "carts"
+    APP_NAME = "sampleApp"
     VERSION = readFile('version').trim()
-    ARTEFACT_ID = "sockshop/" + "${env.APP_NAME}"
+    ARTEFACT_ID = "${env.GITHUB_ORGANIZATION}/" + "${env.APP_NAME}"
     BASE_TAG = "${env.DOCKER_REGISTRY_URL}:5000/library/${env.ARTEFACT_ID}"
     IMAGE_TAG = "${env.BASE_TAG}:pr-${env.CHANGE_ID}"
     //PR_BRANCH = "${env.APP_NAME}-${env.BRANCH_NAME}".toLowerCase()
