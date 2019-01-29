@@ -2,7 +2,7 @@
 # and uses Docker multistage builds
 
 # Use bitnami/node:7 for the build stage
-FROM bitnami/node:7 as builder
+FROM bitnami/node:7
 
 # Install additional dependencies required by the app
 RUN install_packages libkrb5-dev
@@ -18,7 +18,7 @@ RUN npm install
 FROM bitnami/node:7-prod
 
 # Copy the application and installed modules from the previous build stage
-COPY --from=builder /app /app
+COPY --from=bitnami/node:7 /app /app
 
 # Actions will be performed by a non-root user id '1001', so it's good
 # practice to explicitly set the required permissions
