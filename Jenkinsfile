@@ -5,7 +5,7 @@ pipeline {
     label 'nodejs'
   }
   environment {
-    APP_NAME = "sample-app"
+    APP_NAME = "sampleApp".toLowerCase()
     VERSION = readFile('version').trim()
     ARTEFACT_ID = "${env.GITHUB_ORGANIZATION}/" + "${env.APP_NAME}"
     BASE_TAG = "${env.DOCKER_REGISTRY_URL}:5000/library/${env.ARTEFACT_ID}"
