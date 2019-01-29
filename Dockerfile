@@ -1,35 +1,20 @@
-# This Docker image uses the latest version of the Bitnami Node 7 Docker image
-# and uses Docker multistage builds
+FROM node:4-alpine
+ENV NODE_ENV "production"
+ENV PORT 8080
+EXPOSE 8080
+RUN addgroup mygroup && adduser -D -G mygroup myuser && mkdir -p /usr/src/app && chown -R myuser /usr/src/app
 
-# Use bitnami/node:7 for the build stage
-FROM bitnami/node:7 as builder
+# Prepare app directory
+WORKDIR /usr/src/app
+COPY package.json /usr/src/app/
+COPY yarn.lock /usr/src/app/
+RUN chown myuser /usr/src/app/yarn.lock
 
-# Install additional dependencies required by the app
-RUN install_packages libkrb5-dev
+USER myuser
+RUN yarn install
 
-# Copy application source code to /app directory
-# of  your container
-COPY app-code /app
+COPY . /usr/src/app
 
-# Install dependencies of your app, defined into package.json
-RUN npm install
-
-# Use bitnami/node:7-prod for the target image
-FROM bitnami/node:7-prod
-
-# Copy the application and installed modules from the previous build stage
-COPY --from=builder /app /app
-
-# Actions will be performed by a non-root user id '1001', so it's good
-# practice to explicitly set the required permissions
-RUN chown -R 1001:1001 /app
-
-# Change the effective UID from 'root' to '1001'
-# Never run application code as 'root'!
-USER 1001
-
-# The application's directory will be the working directory
-WORKDIR /app
-
-# Run your app!
-CMD ["npm", "start"]
+# Start the app
+#CMD ["/usr/local/bin/npm", "start", "--domain=.jx-staging.35.241.184.104.nip.io"] 
+CMD ["/usr/local/bin/npm", "start"]

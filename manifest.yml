@@ -1,0 +1,13 @@
+---
+applications:
+- name: APPNAME
+  memory: 512M
+  instances: 1
+  command: npm start
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack.git
+  env:
+    DOMAIN: .apps.pcfeu.dev.dynatracelabs.com
+    DT_NODE_ID: APPNAME
+    DT_CUSTOM_PROP: DEPLOYMENT_GRP_NAME=DTGRP DEPLOYMENT_COLOR=APPCOLOR
+    DEPLOYMENT_GRP_NAME: DTGRP
+    DUMMY_VAR: changethisagain2
