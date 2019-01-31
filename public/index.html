@@ -1,242 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<!-- Declares meanMapApp as the starting Angular module -->
+<html class="no-js" ng-app="meanMapApp">
 <head>
-
     <meta charset="utf-8">
-    <meta name="robots" content="all,follow">
-    <meta name="googlebot" content="index,follow,snippet,archive">
+    <title>Scotch MEAN Map</title>
+    <meta name="description" content="An example demonstrating Google Map integration with MEAN Apps">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="WeaveSocks Demo App">
-    <meta name="author" content="Ondrej Svestka | ondrejsvestka.cz">
-    <meta name="keywords" content="">
 
-    <title>
-        WeaveSocks - Dynatrace Version
-    </title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="style.css"/>
 
-    <meta name="keywords" content="">
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrn605l7RPadiwdzsOlRw9O28lxfYBJ6s"></script>
 
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100'
-          rel='stylesheet' type='text/css'>
+    <!-- Modernizr -->
+    <script src="../bower_components/modernizr/bin/modernizr"></script>
 
-    <!-- styles -->
-    <link href="css/font-awesome.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/animate.min.css" rel="stylesheet">
-    <link href="css/owl.carousel.css" rel="stylesheet">
-    <link href="css/owl.theme.css" rel="stylesheet">
+    <!-- JS Source -->
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-route/angular-route.js"></script>
+    <script src="../bower_components/angularjs-geolocation/dist/angularjs-geolocation.min.js"></script>
 
-    <!-- theme stylesheet -->
-    <link href="css/style.blue.css" rel="stylesheet" id="theme-stylesheet">
-
-    <!-- your stylesheet with modifications -->
-    <link href="css/custom.css" rel="stylesheet">
-
-    <script src="js/respond.min.js"></script>
-
-    <link rel="shortcut icon" href="favicon.png">
-
-
+    <!-- Angular Files -->
+    <script src="js/app.js"></script>
+    <script src="js/gservice.js"></script>
+    <script src="js/addCtrl.js"></script>
+    <script src="js/queryCtrl.js"></script>
+    <script src="js/headerCtrl.js"></script>
 </head>
 
 <body>
+<!--[if lt IE 10]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
 
-<div id="topbar"></div>
-<div id="navbar"></div>
+<div class="container">
+    <!-- Header Menu. Note use of headerCtrl -->
+    <div class="header" ng-controller="headerCtrl">
 
-<div id="all">
+        <!-- Header items are made active upon selection -->
+        <ul class="nav nav-pills pull-right">
+             <li ng-class="{ active: isActive('/join')}"><a href="/#/join">Join the Team</a></li>
+            <li ng-class="{ active: isActive('/find')}"><a href="/#/find">Find Teammates</a></li>
+        </ul>
 
-    <div id="content">
+        <!-- Header Title -->
+        <h3 class="text-muted">The Scotch MEAN MapApp running on Kubernetes</h3>
+    </div>
 
-        <div class="container">
-            <div class="col-md-12">
-                <div id="main-slider">
-                    <div class="item">
-                        <a href="detail.html?id=6d62d909-f957-430e-8689-b5129c0bb75e">
-                            <img class="img-responsive" src="img/weave1.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a href="detail.html?id=6d62d909-f957-430e-8689-b5129c0bb75e">
-                            <img class="img-responsive" src="img/weave2.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="item">
-                        <a href="detail.html?id=6d62d909-f957-430e-8689-b5129c0bb75e">
-                            <img class="img-responsive" src="img/weave3.jpg" alt="">
-                        </a>
-                    </div>
-                </div>
-                <!-- /#main-slider -->
-            </div>
+    <!-- Map and Side Panel -->
+    <div class="row content">
+
+        <!-- Google Map -->
+        <div class="col-md-7">
+            <div id="map"></div>
         </div>
 
-        <!-- *** ADVANTAGES HOMEPAGE ***
-_________________________________________________________ -->
-        <div id="advantages">
-
-            <div class="container">
-                <div class="same-height-row">
-                    <div class="col-sm-4">
-                        <div class="box same-height clickable">
-                            <div class="icon"><i class="fa fa-heart"></i>
-                            </div>
-
-                            <h3><a href="#">We love socks!</a></h3>
-                            <p>Fun fact: Socks were invented by woolly mammoths
-                                to keep warm. They died out because stupid
-                                humans had to cut their legs off to get their
-                                socks.</p>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="box same-height clickable">
-                            <div class="icon"><i class="fa fa-tags"></i>
-                            </div>
-
-                            <h3><a href="#">Best prices</a></h3>
-                            <p>We price check our socks with trained monkeys
-                                back at the office.</p>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="box same-height clickable">
-                            <div class="icon"><i class="fa fa-thumbs-up"></i>
-                            </div>
-
-                            <h3><a href="#">100% satisfaction guaranteed</a>
-                            </h3>
-                            <p>Free returns on most items. Hamsters are
-                                non-returnable once spoken to.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
-
-            </div>
-            <!-- /.container -->
-
-        </div>
-        <!-- /#advantages -->
-
-        <!-- *** ADVANTAGES END *** -->
-
-        <!-- *** HOT PRODUCT SLIDESHOW ***
-_________________________________________________________ -->
-        <div id="hot">
-
-            <div class="box">
-                <div class="container">
-                    <div class="col-md-12">
-                        <h2>Hot this week</h2>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container">
-                <div class="product-slider" id="hot-slider">
-                </div>
-                <!-- /.product-slider -->
-            </div>
-            <!-- /.container -->
-
-        </div>
-        <!-- /#hot -->
-
-        <!-- *** HOT END *** -->
+        <!-- Side Panel (Controlled by ng-view) -->
+        <div ng-view></div>
 
     </div>
-    <!-- /#content -->
+    <hr/>
 
-    <div id="footer"></div>
+    <!-- Footer -->
+    <div class="footer">
+        <p class="text-center"><span class="glyphicon glyphicon-check"></span> Created by Ahmed Haque for Scotch IO -
+            <a href="https://scotch.io/">App Tutorial</a> | <a href="https://github.com/afhaque/MeanMapAppV2.0">Github Repo</a></p>
+    </div>
 
 </div>
-<!-- /#all -->
 
-
-<!-- *** SCRIPTS TO INCLUDE ***
-_________________________________________________________ -->
-<script src="js/jquery-1.11.0.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/js.cookie.js"></script>
-<script src="js/client.js"></script>
-<script src="js/jquery.cookie.js"></script>
-<script src="js/waypoints.min.js"></script>
-<script src="js/modernizr.js"></script>
-<script src="js/bootstrap-hover-dropdown.js"></script>
-<script src="js/owl.carousel.min.js"></script>
-<script src="js/front.js"></script>
-<script src="js/jquery.query-object.js"></script>
-<script src="js/client.js"></script>
-<script>
-
-    $(document).ready(function () {
-        $.ajaxSetup({
-            contentType: "application/json; charset=utf-8"
-        });
-
-        console.log("Loading components for index.html");
-        $("#topbar").load("topbar.html");
-        $("#navbar").load("navbar.html");
-        $("#footer").load("footer.html");
-
-        $.getJSON('/catalogue', {size: 5}, function (data) {
-            if (data != null) {
-                $.each(data, function (index, element) {
-                    $('#hot-slider').append(
-                            '<div class="item">\
-                            <div class="product">\
-                                <div class="flip-container">\
-                                    <div class="flipper">\
-                                        <div class="front">\
-                                            <a href="detail.html?id=' + element.id + '">\
-                                            <img src="' + element.imageUrl[0] + '" alt="" class="img-responsive">\
-                                        </a>\
-                                    </div>\
-                                    <div class="back">\
-                                        <a href="detail.html?id=' + element.id + '">\
-                                            <img src="' + element.imageUrl[1] + '" alt="" class="img-responsive">\
-                                        </a>\
-                                    </div>\
-                                </div>\
-                            </div>\
-                            <a href="detail.html?id=' + element.id + '" class="invisible">\
-                                <img src="' + element.imageUrl[0] + '" alt="" class="img-responsive">\
-                            </a>\
-                            <div class="text">\
-                                <h3><a href="detail.html?id=' + element.id + '">' + element.name + '</a></h3>\
-                                <p class="price">$' + element.price + '</p>\
-                            </div>\
-                        </div>\
-                    </div>'
-                    );
-                });
-                $('.product-slider').owlCarousel({
-                    navigation: true, // Show next and prev buttons
-                    slideSpeed: 300,
-                    paginationSpeed: 400,
-                    afterInit: function () {
-                        $('.product-slider .item').css('visibility', 'visible');
-                    }
-                });
-
-                $('#main-slider').owlCarousel({
-                    navigation: true, // Show next and prev buttons
-                    slideSpeed: 300,
-                    paginationSpeed: 400,
-                    autoPlay: true,
-                    stopOnHover: true,
-                    singleItem: true,
-                    afterInit: ''
-                });
-
-            }
-        });
-    })
-</script>
 </body>
-
 </html>

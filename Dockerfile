@@ -1,20 +1,21 @@
-FROM node:4-alpine
+FROM bitnami/node:7
 ENV NODE_ENV "production"
 ENV PORT 8080
 EXPOSE 8080
-RUN addgroup mygroup && adduser -D -G mygroup myuser && mkdir -p /usr/src/app && chown -R myuser /usr/src/app
+
+# Install additional dependencies required by the app
+RUN install_packages libkrb5-dev
 
 # Prepare app directory
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
-COPY yarn.lock /usr/src/app/
-RUN chown myuser /usr/src/app/yarn.lock
-
-USER myuser
-RUN yarn install
 
 COPY . /usr/src/app
 
+RUN chown -R 1001:1001 /usr/src/app
+
+USER 1001
+
 # Start the app
 #CMD ["/usr/local/bin/npm", "start", "--domain=.jx-staging.35.241.184.104.nip.io"] 
-CMD ["/usr/local/bin/npm", "start"]
+CMD ["npm", "start"]
