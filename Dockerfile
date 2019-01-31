@@ -1,7 +1,7 @@
 FROM bitnami/node:7
 ENV NODE_ENV "production"
-ENV PORT 8080
-EXPOSE 8080
+ENV PORT 3000
+EXPOSE 3000
 
 # Install additional dependencies required by the app
 RUN install_packages libkrb5-dev
