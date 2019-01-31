@@ -9,11 +9,11 @@ var bodyParser      = require('body-parser');
 var methodOverride  = require('method-override');
 var app             = express();
 
-console.log('connecting to ' + database.bitnami.url);
+console.log('connecting to ' + database.bitnami.url, {useNewUrlParser: true});
 // Express Configuration
 // -----------------------------------------------------
 // Sets the connection to MongoDB
-// mongoose.connect(database.bitnami.url);
+mongoose.connect(database.bitnami.url);
 
 // Logging and Parsing
 app.use(express.static(__dirname + '/public'));                 // sets the static files location to public
