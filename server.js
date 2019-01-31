@@ -13,7 +13,7 @@ console.log('connecting to ' + database.bitnami.url, {useNewUrlParser: true});
 // Express Configuration
 // -----------------------------------------------------
 // Sets the connection to MongoDB
-mongoose.connect(database.bitnami.url);
+// mongoose.connect(database.bitnami.url);
 
 // Logging and Parsing
 app.use(express.static(__dirname + '/public'));                 // sets the static files location to public
@@ -27,8 +27,17 @@ app.use(methodOverride());
 
 // Routes
 // ------------------------------------------------------
-require('./app/routes.js')(app);
-
+// require('./app/routes.js')(app);
+app.get('/', function (req, res, next) {
+    // check my health
+    res.sendStatus(200);
+    res.json({status: 'UP'});
+  });
+app.get('/health', function (req, res, next) {
+    // check my health
+    res.sendStatus(200);
+    res.json({status: 'UP'});
+  });
 // Listen
 // -------------------------------------------------------
 app.listen(port);
