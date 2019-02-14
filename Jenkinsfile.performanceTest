@@ -1,0 +1,77 @@
+@Library('dynatrace@master') _
+
+def tagMatchRules = [
+  [
+    meTypes: [
+      [meType: 'SERVICE']
+    ],
+    tags : [
+      [context: 'CONTEXTLESS', key: 'app', value: 'user'],
+      [context: 'CONTEXTLESS', key: 'environment', value: 'dev']
+    ]
+  ]
+]
+
+pipeline {
+  agent {
+    label 'git'
+  }
+  parameters {
+    string(name: 'APP_NAME', defaultValue: '', description: 'The name of the service to test.', trim: true)
+    string(name: 'ENVIRONMENT', defaultValue: '', description: 'The env for which to change the configuration.', trim: true)
+  }
+  stages {
+    stage('Performance Check') {
+      steps {
+        checkout scm
+        /*
+        recordDynatraceSession(
+          envId: 'Dynatrace Tenant',
+          testCase: 'loadtest',
+          tagMatchRules: tagMatchRules
+        )
+        */ 
+        {
+          container('jmeter') {
+            script {
+              def status = executeJMeter ( 
+                scriptName: "jmeter/load.jmx",
+                resultsDir: "PerfCheck_${env.APP_NAME}",
+                serverUrl: "${env.APP_NAME}.${env.ENVIRONMENT}", 
+                serverPort: 80,
+                checkPath: '/health',
+                vuCount: 10,
+                loopCount: 250,
+                thinkTime: 500,
+                LTN: "PerfCheck_${BUILD_NUMBER}",
+                funcValidation: false,
+                avgRtValidation: 250
+              )
+              if (status != 0) {
+                currentBuild.result = 'FAILED'
+                error "Performance check failed."
+              }
+            }
+          }
+        }
+        /*
+        perfSigDynatraceReports(
+          envId: 'Dynatrace Tenant', 
+          nonFunctionalFailure: 1, 
+          specFile: "monspec/${env.APP_NAME}_perfsig.json"
+        )
+        */ 
+      }
+    }
+  }
+  post {
+    success {
+      container("curl") {
+        sh "curl -X POST \"http://event-broker.keptn.svc.cluster.local\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{  \\\"specversion\\\" : \\\"0.2\\\", \\\"type\\\" : \\\"sh.keptn.events.test.finished\\\", \\\"source\\\" : \\\"jenkins-${env.BUILD_NUMBER}\\\", \\\"id\\\" : \\\"${env.PULL_REQUEST}\\\", \\\"contenttype\\\" : \\\"application-json\\\", \\\"data\\\": { \\\"status\\\": \\\"success\\\", \\\"environment\\\": \\\"dev\\\", \\\"service\\\": \\\"${env.APP_NAME}\\\", \\\"github_org\\\": \\\"${env.GITHUB_ORGANIZATION}\\\", \\\"pull_request\\\": \\\"${PULL_REQUEST}\\\"}}\" "       
+      }
+    }
+    failure {
+        sh "curl -X POST \"http://event-broker.keptn.svc.cluster.local\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{  \\\"specversion\\\" : \\\"0.2\\\", \\\"type\\\" : \\\"sh.keptn.events.test.finished\\\", \\\"source\\\" : \\\"jenkins-${env.BUILD_NUMBER}\\\", \\\"id\\\" : \\\"${env.PULL_REQUEST}\\\", \\\"contenttype\\\" : \\\"application-json\\\", \\\"data\\\": { \\\"status\\\": \\\"failure\\\", \\\"environment\\\": \\\"dev\\\", \\\"service\\\": \\\"${env.APP_NAME}\\\", \\\"github_org\\\": \\\"${env.GITHUB_ORGANIZATION}\\\", \\\"pull_request\\\": \\\"${PULL_REQUEST}\\\"}}\" "
+    }
+  }
+}
