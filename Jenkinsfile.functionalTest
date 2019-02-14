@@ -40,7 +40,7 @@ pipeline {
             resultsDir: "PerfCheck_${env.APP_NAME}",
             serverUrl: "${env.APP_NAME}.${env.ENVIRONMENT}", 
             serverPort: 3000,
-            checkPath: '/health',
+            checkPath: '/',
             vuCount: 10,
             loopCount: 2,
             thinkTime: 500,
