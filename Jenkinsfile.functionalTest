@@ -71,7 +71,9 @@ pipeline {
       }
     }
     failure {
-        sh "curl -X POST \"http://event-broker.keptn.svc.cluster.local\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{  \\\"specversion\\\" : \\\"0.2\\\", \\\"type\\\" : \\\"sh.keptn.events.test.finished\\\", \\\"source\\\" : \\\"jenkins-${env.BUILD_NUMBER}\\\", \\\"id\\\" : \\\"${env.PULL_REQUEST}\\\", \\\"contenttype\\\" : \\\"application-json\\\", \\\"data\\\": { \\\"status\\\": \\\"failure\\\", \\\"environment\\\": \\\"dev\\\", \\\"service\\\": \\\"${env.APP_NAME}\\\", \\\"github_org\\\": \\\"${env.GITHUB_ORGANIZATION}\\\", \\\"pull_request\\\": \\\"${PULL_REQUEST}\\\"}}\" "
+        container("curl) {
+            sh "curl -X POST \"http://event-broker.keptn.svc.cluster.local\" -H \"accept: application/json\" -H \"Content-Type: application/json\" -d \"{  \\\"specversion\\\" : \\\"0.2\\\", \\\"type\\\" : \\\"sh.keptn.events.test.finished\\\", \\\"source\\\" : \\\"jenkins-${env.BUILD_NUMBER}\\\", \\\"id\\\" : \\\"${env.PULL_REQUEST}\\\", \\\"contenttype\\\" : \\\"application-json\\\", \\\"data\\\": { \\\"status\\\": \\\"failure\\\", \\\"environment\\\": \\\"dev\\\", \\\"service\\\": \\\"${env.APP_NAME}\\\", \\\"github_org\\\": \\\"${env.GITHUB_ORGANIZATION}\\\", \\\"pull_request\\\": \\\"${PULL_REQUEST}\\\"}}\" "
+        }
     }
   }
 }
