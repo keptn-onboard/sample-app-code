@@ -42,7 +42,7 @@ pipeline {
             serverPort: 3000,
             checkPath: '/health',
             vuCount: 10,
-            loopCount: 25,
+            loopCount: 2,
             thinkTime: 500,
             LTN: "PerfCheck_${BUILD_NUMBER}",
             funcValidation: false,
